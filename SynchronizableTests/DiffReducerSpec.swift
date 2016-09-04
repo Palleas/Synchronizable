@@ -32,13 +32,10 @@ class DiffReducerSpec: QuickSpec {
                     }
 
                     it("should contain only Insert diff") {
-                        let inserts = result.filter {
-                            guard case .Insert(_) = $0 else { return false }
+                        let diffFrequencies = frequencies(result) { $0.key }
 
-                            return true
-                        }
-
-                        expect(inserts.count).to(equal(synchronizables.count))
+                        expect(diffFrequencies.count).to(equal(1))
+                        expect(diffFrequencies["Insert"]).to(equal(synchronizables.count))
                     }
 
                     it("should return Insert diffs that match the Synchronizables") {
