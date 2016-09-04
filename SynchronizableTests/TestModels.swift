@@ -11,12 +11,17 @@ import Foundation
 
 struct GithubRepository: Synchronizable {
     let identifier: String
+    let head: String
 
-    func compare(against persistable: Persistable) -> Diff {
-        return .Insert(self)
+    func comparison(against persisted: Repository) -> Diff {
+        guard persisted.head == head else { return .Update(self) }
+
+        return .None
     }
 }
 
 struct Repository: Persistable {
     let identifier: String
+    let head: String
+
 }

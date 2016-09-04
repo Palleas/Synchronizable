@@ -19,8 +19,22 @@ extension Identifiable {
     }
 }
 
-protocol Synchronizable: Identifiable {
+protocol SynchronizableType: Identifiable {
     func compare(against persistable: Persistable) -> Diff
+}
+
+protocol Synchronizable: SynchronizableType {
+    associatedtype PersistedType: Persistable
+
+    func comparison(against persistable: PersistedType) -> Diff
+}
+
+extension Synchronizable {
+    func compare(against persistable: Persistable) -> Diff {
+        guard let compared = persistable as? PersistedType else { return .None }
+
+        return comparison(against: compared)
+    }
 }
 
 protocol Persistable: Identifiable {
@@ -28,8 +42,8 @@ protocol Persistable: Identifiable {
 }
 
 enum Diff {
-    case Insert(Synchronizable)
-    case Update(Synchronizable)
+    case Insert(SynchronizableType)
+    case Update(SynchronizableType)
     case Delete(identifier: String)
     case None
 
@@ -46,7 +60,7 @@ enum Diff {
 
 extension Diff {
 
-    static func reducer(local persistables: [Persistable], remote synchronizables: [Synchronizable]) -> [Diff] {
+    static func reducer(local persistables: [Persistable], remote synchronizables: [SynchronizableType]) -> [Diff] {
         let persistedIdentifiers = persistables.map { $0.identifier }
 
         return synchronizables

@@ -14,12 +14,12 @@ class DiffReducerSpec: QuickSpec {
     
     override func spec() {
         describe("The Diff Reducer") {
-            let synchronizables: [Synchronizable] = (0..<10)
-                .map { "repository\($0)" }
+            let synchronizables: [SynchronizableType] = (0..<10)
+                .map { ("repository\($0)", $0 < 5 ? "updated" : "not-updated" ) }
                 .map(GithubRepository.init)
 
             let persistables: [Persistable] = (3..<12)
-                .map { "repository\($0)" }
+                .map { ("repository\($0)", "not-updated") }
                 .map(Repository.init)
 
             context("When the persistence store is empty") {
