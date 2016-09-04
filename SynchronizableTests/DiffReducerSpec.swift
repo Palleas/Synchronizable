@@ -14,10 +14,15 @@ class DiffReducerSpec: QuickSpec {
     
     override func spec() {
         describe("The Diff Reducer") {
+            let synchronizables: [Synchronizable] = (0..<10)
+                .map { "repository\($0)" }
+                .map(GithubRepository.init)
+
+            let persistables: [Persistable] = (3..<12)
+                .map { "repository\($0)" }
+                .map(Repository.init)
+
             context("When the persistence store is empty") {
-                let synchronizables: [Synchronizable] = (0..<10)
-                    .map { "repository\($0)" }
-                    .map(GithubRepository.init)
 
                 describe("the resulting diff array") {
                     let result = Diff.reducer(local: [], remote: synchronizables)
@@ -50,18 +55,18 @@ class DiffReducerSpec: QuickSpec {
                     }
                 }
             }
+
+            context("When the persistence store contains Persistables") {
+                describe("the resulting diff array") {
+                    let result = Diff.reducer(local: persistables, remote: synchronizables)
+
+                    it("should contain as much elements as the synchronizable input") {
+                        expect(result.count).to(equal(synchronizables.count))
+                    }
+
+                    
+                }
+            }
         }
     }
-}
-
-struct GithubRepository: Synchronizable {
-    let identifier: String
-
-    func compare(against persistable: Persistable) -> Diff {
-        return .Insert(self)
-    }
-}
-
-struct Repository: Persistable {
-    let identifier: String
 }

@@ -31,6 +31,17 @@ enum Diff {
     case Insert(Synchronizable)
     case Update(Synchronizable)
     case Delete(identifier: String)
+    case None
+
+    var key: String {
+        switch self {
+        case .Insert(_): return "Insert"
+        case .Update(_): return "Update"
+        case .Delete(_): return "Delete"
+        case .None: return "None"
+        }
+
+    }
 }
 
 extension Diff {
