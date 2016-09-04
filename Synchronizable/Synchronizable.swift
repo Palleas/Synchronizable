@@ -54,18 +54,18 @@ enum Diff {
         case .Delete(_): return "Delete"
         case .None: return "None"
         }
-
     }
 }
 
 extension Diff {
 
     static func reducer(local persistables: [Persistable], remote synchronizables: [SynchronizableType]) -> [Diff] {
-        let persistedIdentifiers = persistables.map { $0.identifier }
+        let persistedIds = Set(persistables.map { $0.identifier })
+        let synchronizablesIds = Set(synchronizables.map { $0.identifier })
 
         return synchronizables
             .map {
-                if !persistedIdentifiers.contains($0.identifier) {
+                if !persistedIds.contains($0.identifier) {
                     return .Insert($0)
                 }
 

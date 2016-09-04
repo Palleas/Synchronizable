@@ -67,15 +67,17 @@ class DiffReducerSpec: QuickSpec {
                     }
 
                     it("should return Insert diffs that match the new Synchronizables") {
-                        let match: Bool = result
-                            .enumerate()
-                            .filter { $0.element.isInsert }
-                            .reduce(true) { acc, row in
-                                let rhs = synchronizables[row.index]
-                                guard case .Insert(let lhs) = row.element else { return false }
-                                return lhs.identifier == rhs.identifier
-                            }
+                        let inserted = synchronizables[0..<3]
+                        let filtered = result.filter { $0.isInsert }
+
+                        let match: Bool = filtered.reduce(true) { acc, diff in
+                            guard case .Insert(let synchronizable) = diff, let lhs = synchronizable as? GithubRepository else { return false }
+                            let rhs = inserted.filter { $0.identifier == lhs.identifier }.first as! GithubRepository
+                            return acc && rhs.head == lhs.head
+                        }
+
                         expect(match).to(beTrue())
+                        expect(inserted.count).to(equal(filtered.count))
                     }
 
                     it("should return 2 Update") {
@@ -83,15 +85,17 @@ class DiffReducerSpec: QuickSpec {
                     }
 
                     it("should return Update diffs that match the updated Synchronizables") {
-                        let match: Bool = result
-                            .enumerate()
-                            .filter { $0.element.isUpdate }
-                            .reduce(true) { acc, row in
-                                let rhs = synchronizables[row.index]
-                                guard case .Update(let lhs) = row.element else { return false }
-                                return lhs.identifier == rhs.identifier
+                        let updated = synchronizables[3...4]
+                        let filtered = result.filter { $0.isUpdate }
+
+                        let match: Bool = filtered.reduce(true) { acc, diff in
+                            guard case .Update(let synchronizable) = diff, let lhs = synchronizable as? GithubRepository else { return false }
+                            let rhs = updated.filter { $0.identifier == lhs.identifier }.first as! GithubRepository
+                            return acc && rhs.head == lhs.head
                         }
+
                         expect(match).to(beTrue())
+                        expect(updated.count).to(equal(filtered.count))
                     }
 
                     it("should return 5 None") {
@@ -102,15 +106,16 @@ class DiffReducerSpec: QuickSpec {
                         expect(freqs["Delete"]).to(equal(3))
                     }
 
-                    it("should return Update diffs that wrap the identifiers of the deleted Persistables") {
-                        let match: Bool = result
-                            .enumerate()
-                            .filter { $0.element.isDelete }
-                            .reduce(true) { acc, row in
-                                guard case .Delete(let identifier) = row.element else { return false }
-                                return identifier == synchronizables[row.index].identifier
+                    it("should return Delete diffs that wrap the identifiers of the deleted Persistables") {
+                        let deleted = persistables[6...8].map { $0.identifier }
+                        let filtered = result.filter { $0.isDelete }
+
+                        let match: [String] = filtered.reduce([]) { acc, diff in
+                            guard case .Delete(let id) = diff else { return acc }
+                            return acc + deleted.filter { $0 == id }
                         }
-                        expect(match).to(beTrue())
+
+                        expect(match).to(equal(deleted))
                     }
                 }
             }
