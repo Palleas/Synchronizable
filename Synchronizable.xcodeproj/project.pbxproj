@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7A0E42F31D7CCAD10067ECEE /* Frequencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0E42F21D7CCAD10067ECEE /* Frequencies.swift */; };
+		7A0E42F51D7CCB840067ECEE /* FrequenciesSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A0E42F41D7CCB840067ECEE /* FrequenciesSpec.swift */; };
 		7AA8CE901D7CAD4C00319FC8 /* Synchronizable.h in Headers */ = {isa = PBXBuildFile; fileRef = 7AA8CE8F1D7CAD4C00319FC8 /* Synchronizable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7AA8CE971D7CAD4C00319FC8 /* Synchronizable.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7AA8CE8C1D7CAD4C00319FC8 /* Synchronizable.framework */; };
 		7AA8CE9C1D7CAD4C00319FC8 /* DiffReducerSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AA8CE9B1D7CAD4C00319FC8 /* DiffReducerSpec.swift */; };
@@ -43,6 +45,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7A0E42F21D7CCAD10067ECEE /* Frequencies.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Frequencies.swift; sourceTree = "<group>"; };
+		7A0E42F41D7CCB840067ECEE /* FrequenciesSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FrequenciesSpec.swift; sourceTree = "<group>"; };
 		7AA8CE8C1D7CAD4C00319FC8 /* Synchronizable.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Synchronizable.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7AA8CE8F1D7CAD4C00319FC8 /* Synchronizable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Synchronizable.h; sourceTree = "<group>"; };
 		7AA8CE911D7CAD4C00319FC8 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -103,6 +107,7 @@
 				7AA8CE911D7CAD4C00319FC8 /* Info.plist */,
 				7AA8CEA61D7CB02300319FC8 /* Synchronizable.swift */,
 				7AA8CEAF1D7CC32900319FC8 /* Compare.swift */,
+				7A0E42F21D7CCAD10067ECEE /* Frequencies.swift */,
 			);
 			path = Synchronizable;
 			sourceTree = "<group>";
@@ -112,6 +117,7 @@
 			children = (
 				7AA8CE9B1D7CAD4C00319FC8 /* DiffReducerSpec.swift */,
 				7AA8CE9D1D7CAD4C00319FC8 /* Info.plist */,
+				7A0E42F41D7CCB840067ECEE /* FrequenciesSpec.swift */,
 			);
 			path = SynchronizableTests;
 			sourceTree = "<group>";
@@ -225,6 +231,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7A0E42F31D7CCAD10067ECEE /* Frequencies.swift in Sources */,
 				7AA8CEA71D7CB02300319FC8 /* Synchronizable.swift in Sources */,
 				7AA8CEB01D7CC32900319FC8 /* Compare.swift in Sources */,
 			);
@@ -235,6 +242,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7AA8CE9C1D7CAD4C00319FC8 /* DiffReducerSpec.swift in Sources */,
+				7A0E42F51D7CCB840067ECEE /* FrequenciesSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -422,6 +430,7 @@
 				7AA8CEA21D7CAD4C00319FC8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7AA8CEA31D7CAD4C00319FC8 /* Build configuration list for PBXNativeTarget "SynchronizableTests" */ = {
 			isa = XCConfigurationList;
@@ -430,6 +439,7 @@
 				7AA8CEA51D7CAD4C00319FC8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
