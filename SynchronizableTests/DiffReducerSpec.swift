@@ -32,10 +32,10 @@ class DiffReducerSpec: QuickSpec {
                     }
 
                     it("should contain only Insert diff") {
-                        let diffFrequencies = frequencies(result) { $0.key }
+                        let freqs = frequencies(result) { $0.key }
 
-                        expect(diffFrequencies.count).to(equal(1))
-                        expect(diffFrequencies["Insert"]).to(equal(synchronizables.count))
+                        expect(freqs.count).to(equal(1))
+                        expect(freqs["Insert"]).to(equal(synchronizables.count))
                     }
 
                     it("should return Insert diffs that match the Synchronizables") {
@@ -56,14 +56,81 @@ class DiffReducerSpec: QuickSpec {
             context("When the persistence store contains Persistables") {
                 describe("the resulting diff array") {
                     let result = Diff.reducer(local: persistables, remote: synchronizables)
+                    let freqs = frequencies(result) { $0.key }
 
                     it("should contain as much elements as the synchronizable input") {
                         expect(result.count).to(equal(synchronizables.count))
                     }
 
-                    
+                    it("should return 3 Insert") {
+                        expect(freqs["Insert"]).to(equal(3))
+                    }
+
+                    it("should return Insert diffs that match the new Synchronizables") {
+                        let match: Bool = result
+                            .enumerate()
+                            .filter { $0.element.isInsert }
+                            .reduce(true) { acc, row in
+                                let rhs = synchronizables[row.index]
+                                guard case .Insert(let lhs) = row.element else { return false }
+                                return lhs.identifier == rhs.identifier
+                            }
+                        expect(match).to(beTrue())
+                    }
+
+                    it("should return 2 Update") {
+                        expect(freqs["Update"]).to(equal(2))
+                    }
+
+                    it("should return Update diffs that match the updated Synchronizables") {
+                        let match: Bool = result
+                            .enumerate()
+                            .filter { $0.element.isUpdate }
+                            .reduce(true) { acc, row in
+                                let rhs = synchronizables[row.index]
+                                guard case .Update(let lhs) = row.element else { return false }
+                                return lhs.identifier == rhs.identifier
+                        }
+                        expect(match).to(beTrue())
+                    }
+
+                    it("should return 5 None") {
+                        expect(freqs["None"]).to(equal(2))
+                    }
+
+                    it("should return 3 Delete") {
+                        expect(freqs["Delete"]).to(equal(3))
+                    }
+
+                    it("should return Update diffs that wrap the identifiers of the deleted Persistables") {
+                        let match: Bool = result
+                            .enumerate()
+                            .filter { $0.element.isDelete }
+                            .reduce(true) { acc, row in
+                                guard case .Delete(let identifier) = row.element else { return false }
+                                return identifier == synchronizables[row.index].identifier
+                        }
+                        expect(match).to(beTrue())
+                    }
                 }
             }
         }
+    }
+}
+
+extension Diff {
+    var isInsert: Bool {
+        guard case .Insert(_) = self else { return false }
+        return true
+    }
+
+    var isUpdate: Bool {
+        guard case .Update(_) = self else { return false }
+        return true
+    }
+
+    var isDelete: Bool {
+        guard case .Delete(_) = self else { return false }
+        return true
     }
 }
