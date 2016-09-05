@@ -2,4 +2,4 @@ language: objective-c
 osx_image: xcode7.3
 notifications:
     email: false
-script: xcodebuild clean test
+script: xcodebuild -scheme Synchronizable clean test
