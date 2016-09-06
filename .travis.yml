@@ -7,5 +7,7 @@ before_script:
   - carthage bootstrap --platform ios
 notifications:
     email: false
-script: xcodebuild -scheme Synchronizable -sdk iphonesimulator -destination "name=iPhone 6s" clean test
+script:
+    - open -b com.apple.iphonesimulator
+    - xcodebuild -scheme Synchronizable -sdk iphonesimulator -destination "name=iPhone 6s" clean test
 
