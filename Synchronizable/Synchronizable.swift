@@ -61,7 +61,7 @@ extension Diff {
 
     static func reducer(local persistables: [Persistable], remote synchronizables: [SynchronizableType]) -> [Diff] {
         let persistedIds = Set(persistables.map { $0.identifier })
-        let synchronizablesIds = Set(synchronizables.map { $0.identifier })
+        let _ = Set(synchronizables.map { $0.identifier })
 
         return synchronizables
             .map {
