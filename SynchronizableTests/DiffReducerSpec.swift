@@ -58,8 +58,10 @@ class DiffReducerSpec: QuickSpec {
                     let result = Diff.reducer(local: persistables, remote: synchronizables)
                     let freqs = frequencies(result) { $0.key }
 
-                    it("should contain as much elements as the synchronizable input") {
-                        expect(result.count).to(equal(synchronizables.count))
+                    let identifiers = Set(persistables.map { $0.identifier } + synchronizables.map { $0.identifier })
+
+                    it("should contain as much elements as there are identifers") {
+                        expect(result.count).to(equal(identifiers.count))
                     }
 
                     it("should return 3 Insert") {
@@ -99,15 +101,15 @@ class DiffReducerSpec: QuickSpec {
                     }
 
                     it("should return 5 None") {
-                        expect(freqs["None"]).to(equal(2))
+                        expect(freqs["None"]).to(equal(5))
                     }
 
-                    it("should return 3 Delete") {
-                        expect(freqs["Delete"]).to(equal(3))
+                    it("should return 2 Delete") {
+                        expect(freqs["Delete"]).to(equal(2))
                     }
 
                     it("should return Delete diffs that wrap the identifiers of the deleted Persistables") {
-                        let deleted = persistables[6...8].map { $0.identifier }
+                        let deleted = persistables[7...8].map { $0.identifier }
                         let filtered = result.filter { $0.isDelete }
 
                         let match: [String] = filtered.reduce([]) { acc, diff in

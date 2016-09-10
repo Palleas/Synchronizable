@@ -61,15 +61,21 @@ extension Diff {
 
     static func reducer(local persistables: [Persistable], remote synchronizables: [SynchronizableType]) -> [Diff] {
         let persistedIds = Set(persistables.map { $0.identifier })
-        let _ = Set(synchronizables.map { $0.identifier })
+        let synchronizedIds = Set(synchronizables.map { $0.identifier })
 
-        return synchronizables
-            .map {
-                if !persistedIds.contains($0.identifier) {
-                    return .Insert($0)
+        let deleted: [Diff] = persistedIds.subtract(synchronizedIds).map { .Delete(identifier: $0) }
+
+        return deleted + synchronizables
+            .map { synchronized in
+                if !persistedIds.contains(synchronized.identifier) {
+                    return .Insert(synchronized)
                 }
 
-                return .Delete(identifier: "lol")
+                if let persisted = persistables.filter({ synchronized.isEqual(to: $0) }).first {
+                    return synchronized.compare(against: persisted)
+                }
+
+                return .None
             }
     }
 }
