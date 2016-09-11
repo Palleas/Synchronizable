@@ -11,10 +11,10 @@ Synchronizable is a framework for iOS to help you cache data locally. It's not r
 
 ### Carthage
 
-Create a Cartfile that lists the framework and run carthage update. Follow the instructions to add $(SRCROOT)/Carthage/Build/iOS/YourLibrary.framework to an iOS project.
-
+Create a Cartfile that lists the framework and run carthage update. Follow the instructions to add $(SRCROOT)/Carthage/Build/iOS/Synchronizable.framework to an iOS project.
+```
 github "palleas/synchronizable"
-
+```
 ## Usage example
 
 At this point, the best way to see how it works is to look [at the Spec](SynchronizableTests/DiffReducerSpec.swift).
