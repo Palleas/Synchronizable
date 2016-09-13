@@ -19,31 +19,19 @@ extension Identifiable {
     }
 }
 
-protocol SynchronizableType: Identifiable {
-    func compare(against persistable: Persistable) -> Diff
-}
-
-protocol Synchronizable: SynchronizableType {
+protocol Synchronizable: Identifiable {
     associatedtype PersistedType: Persistable
 
-    func comparison(against persistable: PersistedType) -> Diff
-}
-
-extension Synchronizable {
-    func compare(against persistable: Persistable) -> Diff {
-        guard let compared = persistable as? PersistedType else { return .None }
-
-        return comparison(against: compared)
-    }
+    func comparison(against persistable: PersistedType) -> Diff<Self>
 }
 
 protocol Persistable: Identifiable {
 
 }
 
-enum Diff {
-    case Insert(SynchronizableType)
-    case Update(SynchronizableType)
+enum Diff<S: Synchronizable> {
+    case Insert(S)
+    case Update(S)
     case Delete(identifier: String)
     case None
 
@@ -59,11 +47,11 @@ enum Diff {
 
 extension Diff {
 
-    static func reducer(local persistables: [Persistable], remote synchronizables: [SynchronizableType]) -> [Diff] {
+    static func reducer<P: Persistable, S: Synchronizable where S.PersistedType == P>(local persistables: [P], remote synchronizables: [S]) -> [Diff<S>] {
         let persistedIds = Set(persistables.map { $0.identifier })
         let synchronizedIds = Set(synchronizables.map { $0.identifier })
 
-        let deleted: [Diff] = persistedIds.subtract(synchronizedIds).map { .Delete(identifier: $0) }
+        let deleted: [Diff<S>] = persistedIds.subtract(synchronizedIds).map { .Delete(identifier: $0) }
 
         return deleted + synchronizables
             .map { synchronized in
@@ -72,7 +60,7 @@ extension Diff {
                 }
 
                 if let persisted = persistables.filter({ synchronized.isEqual(to: $0) }).first {
-                    return synchronized.compare(against: persisted)
+                    return synchronized.comparison(against: persisted)
                 }
 
                 return .None

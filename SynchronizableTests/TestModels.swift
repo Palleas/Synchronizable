@@ -10,10 +10,12 @@ import Foundation
 @testable import Synchronizable
 
 struct GithubRepository: Synchronizable {
+    typealias PersistedType = Repository
+    
     let identifier: String
     let head: String
 
-    func comparison(against persisted: Repository) -> Diff {
+    func comparison(against persisted: Repository) -> Diff<GithubRepository> {
         guard persisted.head == head else { return .Update(self) }
 
         return .None

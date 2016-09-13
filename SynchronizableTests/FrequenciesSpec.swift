@@ -41,7 +41,7 @@ class FrequenciesSpec: QuickSpec {
         }
 
         context("When applied on a collection of Diff") {
-            let diffs: [Diff] = [
+            let diffs: [Diff<GithubRepository>] = [
                 .Insert(GithubRepository(identifier: "ReactiveCocoa", head: "qwertyu")),
                 .Insert(GithubRepository(identifier: "RxSwift", head: "qwertyu")),
                 .Update(GithubRepository(identifier: "Synchronizable", head: "qwertyu")),

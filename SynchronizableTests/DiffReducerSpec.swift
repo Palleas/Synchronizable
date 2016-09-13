@@ -14,18 +14,18 @@ class DiffReducerSpec: QuickSpec {
     
     override func spec() {
         describe("The Diff Reducer") {
-            let synchronizables: [SynchronizableType] = (0..<10)
+            let synchronizables: [GithubRepository] = (0..<10)
                 .map { ("repository\($0)", $0 < 5 ? "updated" : "not-updated" ) }
                 .map(GithubRepository.init)
 
-            let persistables: [Persistable] = (3..<12)
+            let persistables: [Repository] = (3..<12)
                 .map { ("repository\($0)", "not-updated") }
                 .map(Repository.init)
 
             context("When the persistence store is empty") {
 
                 describe("the resulting diff array") {
-                    let result = Diff.reducer(local: [], remote: synchronizables)
+                    let result = Diff<GithubRepository>.reducer(local: [], remote: synchronizables)
 
                     it("should contain as much elements as the synchronizable input") {
                         expect(result.count).to(equal(synchronizables.count))
@@ -55,7 +55,7 @@ class DiffReducerSpec: QuickSpec {
 
             context("When the persistence store contains Persistables") {
                 describe("the resulting diff array") {
-                    let result = Diff.reducer(local: persistables, remote: synchronizables)
+                    let result = Diff<GithubRepository>.reducer(local: persistables, remote: synchronizables)
                     let freqs = frequencies(result) { $0.key }
 
                     let identifiers = Set(persistables.map { $0.identifier } + synchronizables.map { $0.identifier })
@@ -73,8 +73,8 @@ class DiffReducerSpec: QuickSpec {
                         let filtered = result.filter { $0.isInsert }
 
                         let match: Bool = filtered.reduce(true) { acc, diff in
-                            guard case .Insert(let synchronizable) = diff, let lhs = synchronizable as? GithubRepository else { return false }
-                            let rhs = inserted.filter { $0.identifier == lhs.identifier }.first as! GithubRepository
+                            guard case .Insert(let lhs) = diff else { return false }
+                            let rhs = inserted.filter { $0.identifier == lhs.identifier }.first!
                             return acc && rhs.head == lhs.head
                         }
 
@@ -91,8 +91,8 @@ class DiffReducerSpec: QuickSpec {
                         let filtered = result.filter { $0.isUpdate }
 
                         let match: Bool = filtered.reduce(true) { acc, diff in
-                            guard case .Update(let synchronizable) = diff, let lhs = synchronizable as? GithubRepository else { return false }
-                            let rhs = updated.filter { $0.identifier == lhs.identifier }.first as! GithubRepository
+                            guard case .Update(let lhs) = diff else { return false }
+                            let rhs = updated.filter { $0.identifier == lhs.identifier }.first!
                             return acc && rhs.head == lhs.head
                         }
 
