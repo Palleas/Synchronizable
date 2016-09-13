@@ -25,7 +25,7 @@ class DiffReducerSpec: QuickSpec {
             context("When the persistence store is empty") {
 
                 describe("the resulting diff array") {
-                    let result = Diff<GithubRepository>.reducer(local: [], remote: synchronizables)
+                    let result = Diff<GithubRepository>.reducer([], remote: synchronizables)
 
                     it("should contain as much elements as the synchronizable input") {
                         expect(result.count).to(equal(synchronizables.count))
@@ -55,7 +55,7 @@ class DiffReducerSpec: QuickSpec {
 
             context("When the persistence store contains Persistables") {
                 describe("the resulting diff array") {
-                    let result = Diff<GithubRepository>.reducer(local: persistables, remote: synchronizables)
+                    let result = Diff<GithubRepository>.reducer(persistables, remote: synchronizables)
                     let freqs = frequencies(result) { $0.key }
 
                     let identifiers = Set(persistables.map { $0.identifier } + synchronizables.map { $0.identifier })
