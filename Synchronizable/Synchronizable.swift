@@ -22,7 +22,7 @@ extension Identifiable {
 protocol Synchronizable: Identifiable {
     associatedtype PersistedType: Persistable
 
-    func comparison(against persistable: PersistedType) -> Diff<Self>
+    func compare(against persistable: PersistedType) -> Diff<Self>
 }
 
 protocol Persistable: Identifiable {
@@ -60,7 +60,7 @@ extension Diff {
                 }
 
                 if let persisted = persistables.filter({ synchronized.isEqual(to: $0) }).first {
-                    return synchronized.comparison(against: persisted)
+                    return synchronized.compare(against: persisted)
                 }
 
                 return .None
