@@ -47,19 +47,19 @@ enum Diff<S: Synchronizable> {
 
 extension Diff {
 
-    static func reducer<P: Persistable, S: Synchronizable where S.PersistedType == P>(local persistables: [P], remote synchronizables: [S]) -> [Diff<S>] {
-        let persistedIds = Set(persistables.map { $0.identifier })
-        let synchronizedIds = Set(synchronizables.map { $0.identifier })
+    static func reducer<P: Persistable, S: Synchronizable where S.PersistedType == P>(local: [P], remote: [S]) -> [Diff<S>] {
+        let persistedIds = Set(local.map { $0.identifier })
+        let synchronizedIds = Set(remote.map { $0.identifier })
 
         let deleted: [Diff<S>] = persistedIds.subtract(synchronizedIds).map { .Delete(identifier: $0) }
 
-        return deleted + synchronizables
+        return deleted + remote
             .map { synchronized in
                 if !persistedIds.contains(synchronized.identifier) {
                     return .Insert(synchronized)
                 }
 
-                if let persisted = persistables.filter({ synchronized.isEqual(to: $0) }).first {
+                if let persisted = local.filter({ synchronized.isEqual(to: $0) }).first {
                     return synchronized.compare(against: persisted)
                 }
 
