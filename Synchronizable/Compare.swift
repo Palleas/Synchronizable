@@ -10,10 +10,10 @@ import Foundation
 
 typealias IdentifiableRow = (index: Int, identifiable: Identifiable)
 
-func compare (lhs: [Identifiable], _ rhs: [Identifiable]) -> Bool {
+func compare (_ lhs: [Identifiable], _ rhs: [Identifiable]) -> Bool {
     guard lhs.count == rhs.count else { return false }
 
-    return lhs.enumerate().reduce(true) { (acc: Bool, row: IdentifiableRow) in
+    return lhs.enumerated().reduce(true) { (acc: Bool, row: IdentifiableRow) in
         acc && rhs[row.index].isEqual(to: row.identifiable)
     }
 }

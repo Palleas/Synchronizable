@@ -41,7 +41,7 @@ class DiffReducerSpec: QuickSpec {
                     it("should return Insert diffs that match the Synchronizables") {
                         let wrappedSynchronizables: [Identifiable] = result
                             .map {
-                                guard case .Insert(let synchronizable) = $0 else { return nil }
+                                guard case .insert(let synchronizable) = $0 else { return nil }
 
                                 return synchronizable
                             }
@@ -73,7 +73,7 @@ class DiffReducerSpec: QuickSpec {
                         let filtered = result.filter { $0.isInsert }
 
                         let match: Bool = filtered.reduce(true) { acc, diff in
-                            guard case .Insert(let lhs) = diff else { return false }
+                            guard case .insert(let lhs) = diff else { return false }
                             let rhs = inserted.filter { $0.identifier == lhs.identifier }.first!
                             return acc && rhs.head == lhs.head
                         }
@@ -91,7 +91,7 @@ class DiffReducerSpec: QuickSpec {
                         let filtered = result.filter { $0.isUpdate }
 
                         let match: Bool = filtered.reduce(true) { acc, diff in
-                            guard case .Update(let lhs) = diff else { return false }
+                            guard case .update(let lhs) = diff else { return false }
                             let rhs = updated.filter { $0.identifier == lhs.identifier }.first!
                             return acc && rhs.head == lhs.head
                         }
@@ -113,11 +113,11 @@ class DiffReducerSpec: QuickSpec {
                         let filtered = result.filter { $0.isDelete }
 
                         let match: [String] = filtered.reduce([]) { acc, diff in
-                            guard case .Delete(let id) = diff else { return acc }
+                            guard case .delete(let id) = diff else { return acc }
                             return acc + deleted.filter { $0 == id }
                         }
 
-                        expect(match).to(equal(deleted))
+                        expect(match.sorted()).to(equal(deleted.sorted()))
                     }
                 }
             }
@@ -127,17 +127,17 @@ class DiffReducerSpec: QuickSpec {
 
 extension Diff {
     var isInsert: Bool {
-        guard case .Insert(_) = self else { return false }
+        guard case .insert(_) = self else { return false }
         return true
     }
 
     var isUpdate: Bool {
-        guard case .Update(_) = self else { return false }
+        guard case .update(_) = self else { return false }
         return true
     }
 
     var isDelete: Bool {
-        guard case .Delete(_) = self else { return false }
+        guard case .delete(_) = self else { return false }
         return true
     }
 }

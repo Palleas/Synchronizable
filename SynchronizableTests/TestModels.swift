@@ -16,9 +16,9 @@ struct GithubRepository: Synchronizable {
     let head: String
 
     func compare(against persisted: Repository) -> Diff<GithubRepository> {
-        guard persisted.head == head else { return .Update(self) }
+        guard persisted.head == head else { return .update(self) }
 
-        return .None
+        return .none
     }
 }
 
