@@ -42,16 +42,16 @@ class FrequenciesSpec: QuickSpec {
 
         context("When applied on a collection of Diff") {
             let diffs: [Diff<GithubRepository>] = [
-                .Insert(GithubRepository(identifier: "ReactiveCocoa", head: "qwertyu")),
-                .Insert(GithubRepository(identifier: "RxSwift", head: "qwertyu")),
-                .Update(GithubRepository(identifier: "Synchronizable", head: "qwertyu")),
-                .Update(GithubRepository(identifier: "Kingfisher", head: "qwertyu")),
-                .Update(GithubRepository(identifier: "SwiftyJSON", head: "qwertyu")),
-                .Delete(identifier: "Argo"),
-                .Delete(identifier: "ObjectMapper"),
-                .Delete(identifier: "ReactKit"),
-                .Delete(identifier: "Alamofire"),
-                .None
+                .insert(GithubRepository(identifier: "ReactiveCocoa", head: "qwertyu")),
+                .insert(GithubRepository(identifier: "RxSwift", head: "qwertyu")),
+                .update(GithubRepository(identifier: "Synchronizable", head: "qwertyu")),
+                .update(GithubRepository(identifier: "Kingfisher", head: "qwertyu")),
+                .update(GithubRepository(identifier: "SwiftyJSON", head: "qwertyu")),
+                .delete(identifier: "Argo"),
+                .delete(identifier: "ObjectMapper"),
+                .delete(identifier: "ReactKit"),
+                .delete(identifier: "Alamofire"),
+                .none
             ]
 
             describe("resulting frequencies") {

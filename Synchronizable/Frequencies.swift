@@ -8,7 +8,7 @@
 
 import Foundation
 
-func frequencies<T, V: Hashable>(source: [T], predicate: (T) -> V) -> [V: Int] {
+func frequencies<T, V: Hashable>(_ source: [T], predicate: (T) -> V) -> [V: Int] {
     return source
         .map(predicate)
         .reduce([V: Int]()) { acc, key in
