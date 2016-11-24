@@ -4,7 +4,7 @@ Synchronizable is a framework for iOS to help you cache data locally. It's not r
 
 ## Requirements 
 
-* Swift 2.3+
+* Swift 3.0
 * Xcode 8
 
 ## Installation
