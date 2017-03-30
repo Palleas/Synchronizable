@@ -1,0 +1,7 @@
+clean: true
+author: Romain Pouclet
+author_url: https://github.com/palleas/synchronizable
+github_url: https://github.com/palleas/synchronizable
+module: Synchronizable
+readme: README.md
+skip_undocumented: false
